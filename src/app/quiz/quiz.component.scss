@@ -1,0 +1,14 @@
+@use "../styles/variables" as var;
+
+.question-options-container {
+	background-color: var.$pokedex-red;
+
+	max-width: 540px;
+
+	.submit-button {
+		text-transform: uppercase;
+
+		background-color: var.$pokemon-blue-light;
+		color: white;
+	}
+}

@@ -1,0 +1,17 @@
+<div
+	[class]="
+		'type-' +
+		type +
+		' quiz-option align-items-center gap-3 d-flex flex-wrap flex-column flex-md-row'
+	"
+>
+	<input
+		type="checkbox"
+		[id]="type"
+		[name]="'pokemon-type-' + type"
+		[value]="type"
+		[(ngModel)]="isChecked"
+		(change)="onCheckboxChange()"
+	/>
+	<label [for]="type">{{ type }}</label>
+</div>
