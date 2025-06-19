@@ -1,0 +1,46 @@
+@use "../styles/variables" as var;
+
+.game-dex {
+	background-color: var.$pokedex-red;
+
+	max-width: 650px;
+	max-height: 910px;
+
+	width: 100%;
+	height: calc(100vw * 1.4);
+
+	border: 5px solid black;
+	border-radius: 25px 25px 100px 25px;
+
+	.screen {
+		height: 50%;
+
+		.black-screen {
+			background-color: var.$pokedex-black;
+
+			margin: 10%;
+
+			width: 80%;
+			height: 80%;
+			border-radius: 25px 25px 75px 25px;
+
+			padding: 5% 5%;
+
+			.white-screen {
+				background-color: #dedede;
+
+				box-sizing: border-box;
+
+				width: 100%;
+				height: 95%;
+
+				border-radius: 10px;
+			}
+
+			h1 {
+				color: white;
+				font-family: fredoka, sans-serif;
+			}
+		}
+	}
+}

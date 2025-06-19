@@ -1,0 +1,12 @@
+<div *ngIf="pokemonData" class="header-container">
+	<h2 class="question">
+		What type(s) does
+		<span class="pokemon-name">{{ pokemonData.pokemonName }}</span>
+		have?
+	</h2>
+	<img
+		[src]="pokemonData.spriteUrl"
+		alt="{{ pokemonData.pokemonName }}"
+		class="pokemon-sprite rounded-circle"
+	/>
+</div>

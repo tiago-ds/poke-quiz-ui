@@ -1,0 +1,15 @@
+<div class="row g-3 justify-content-center">
+	<div class="col-5" *ngFor="let type of options">
+		<quiz-option
+			[type]="type"
+			(selectionChange)="onTypeSelectionChange($event)"
+		></quiz-option>
+	</div>
+</div>
+<button
+	class="submit-button d-block mx-auto mt-5 mb-1 p-2 w-auto rounded-5"
+	(click)="onSubmit()"
+	[disabled]="!selectedTypes.length"
+>
+	Submit
+</button>

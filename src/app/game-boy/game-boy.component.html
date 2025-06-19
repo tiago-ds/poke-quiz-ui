@@ -1,0 +1,18 @@
+<div class="game-dex d-flex flex-column justify-content-around">
+	<div class="screen">
+		<div class="black-screen d-flex flex-column align-items-center">
+			<div class="white-screen">
+				<p *ngIf="!quizOptions">Loading Pokémon data...</p>
+				<app-screen
+					*ngIf="pokemonData"
+					[pokemonData]="pokemonData"
+				></app-screen>
+			</div>
+			<h1 class="align-self-start mt-2">POKÉ QUIZ</h1>
+		</div>
+	</div>
+	<app-buttons
+		[options]="quizOptions"
+		[pokemonData]="pokemonData"
+	></app-buttons>
+</div>

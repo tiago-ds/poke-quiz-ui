@@ -1,4 +1,4 @@
-@use "../../styles/variables" as var;
+@use "../../../styles/variables" as var;
 
 .quiz-option {
 	input[type="checkbox"] {
@@ -20,7 +20,7 @@
 		}
 
 		&:checked {
-			background-image: url("../../../assets/pokeball.svg");
+			background-image: url("../../../../assets/pokeball.svg");
 			transform: scale(1.2);
 		}
 	}
@@ -32,6 +32,10 @@
 	font-weight: 600;
 	text-transform: uppercase;
 	font-size: 1.25rem;
+
+	@media (max-width: 600px) {
+		font-size: 1rem;
+	}
 
 	color: #ffffff;
 	text-align: center;

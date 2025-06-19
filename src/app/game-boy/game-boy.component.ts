@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { PokemonData } from '../types';
 import { generateTypeQuestion } from '../utils/constants';
-import { QuizOptionCardComponent } from './quiz-option-card/quiz-option-card.component';
+import { CommonModule } from '@angular/common';
+import { ScreenComponent } from './screen/screen.component';
+import { ButtonsComponent } from './buttons/buttons.component';
 
 @Component({
-	selector: 'app-quiz',
-	standalone: true,
-	imports: [QuizOptionCardComponent, CommonModule],
-	templateUrl: `./quiz.component.html`,
-	styleUrl: './quiz.component.scss',
+	selector: 'app-game-boy',
+	imports: [CommonModule, ScreenComponent, ButtonsComponent],
+	templateUrl: './game-boy.component.html',
+	styleUrl: './game-boy.component.scss',
 })
-export class QuizComponent implements OnInit {
+export class GameBoyComponent {
 	pokemonData: PokemonData | null = null;
-	questionOptions: Array<string> = [];
+	quizOptions: Array<string> = [];
 	selectedTypes: string[] = []; // This array will hold the types the user has selected
 
 	constructor(private http: HttpClient) {}
@@ -34,7 +34,7 @@ export class QuizComponent implements OnInit {
 				};
 
 				if (this.pokemonData?.types) {
-					this.questionOptions = generateTypeQuestion(
+					this.quizOptions = generateTypeQuestion(
 						this.pokemonData.types
 					);
 				}
@@ -54,7 +54,7 @@ export class QuizComponent implements OnInit {
 		// 		'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png',
 		// };
 
-		// this.questionOptions = generateTypeQuestion(this.pokemonData.types);
+		// this.quizOptions = generateTypeQuestion(this.pokemonData.types);
 	}
 
 	onTypeSelectionChange(event: { type: string; isChecked: boolean }): void {

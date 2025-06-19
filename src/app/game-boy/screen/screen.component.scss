@@ -1,0 +1,23 @@
+@use "../../styles/variables" as var;
+
+.header-container {
+	.question {
+		color: var.$pokedex-black;
+		margin: 0.5rem 0 0 0.5rem;
+
+		.pokemon-name {
+			font-weight: 600;
+		}
+	}
+
+	.pokemon-sprite {
+		background-color: var.$pokedex-blue;
+
+		display: block;
+		margin: 0 auto;
+
+		@media (min-width: 768px) {
+			scale: 1.5;
+		}
+	}
+}
