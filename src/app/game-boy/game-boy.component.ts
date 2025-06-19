@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PokemonData } from '../types';
-import { generateTypeQuestion } from '../utils/constants';
+import { generateTypeQuestion } from '../utils/utils';
 import { CommonModule } from '@angular/common';
 import { ScreenComponent } from './screen/screen.component';
 import { ButtonsComponent } from './buttons/buttons.component';

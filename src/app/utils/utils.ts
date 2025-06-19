@@ -18,10 +18,6 @@ const types = [
 	'dark',
 ];
 
-function capitalize(string: string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 const shuffleArray = (array: Array<string>): Array<string> => {
 	let remainingElements = array.length;
 
