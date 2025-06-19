@@ -13,6 +13,7 @@ export class QuizOptionComponent {
 	@Input()
 	type!: string;
 
+	@Input()
 	isChecked: boolean = false;
 
 	@Output() selectionChange = new EventEmitter<{
