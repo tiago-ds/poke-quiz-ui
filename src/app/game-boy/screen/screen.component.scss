@@ -11,7 +11,8 @@
 	}
 
 	.pokemon-sprite {
-		background-color: var.$pokedex-blue;
+		background-position: center;
+		background-size: cover;
 
 		display: block;
 		margin: 0 auto;
