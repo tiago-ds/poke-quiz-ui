@@ -4,4 +4,12 @@
 	color: white;
 	background-color: #3c373f;
 	text-transform: uppercase;
+
+	@media (max-width: 600px) {
+		font-size: 1rem;
+	}
+
+	@media (max-width: 400px) {
+		font-size: 0.875rem;
+	}
 }

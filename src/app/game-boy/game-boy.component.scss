@@ -40,6 +40,10 @@
 			h1 {
 				color: white;
 				font-family: fredoka, sans-serif;
+
+				@media (max-width: 600px) {
+					font-size: 1rem;
+				}
 			}
 		}
 	}

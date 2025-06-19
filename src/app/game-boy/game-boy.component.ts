@@ -47,6 +47,7 @@ export class GameBoyComponent {
 			},
 		});
 
+		// Mocked data to avoid too many requests for the API
 		// this.pokemonData = {
 		// 	pokemonName: 'belossom',
 		// 	types: ['grass', 'poison'],
