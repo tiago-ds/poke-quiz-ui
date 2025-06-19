@@ -14,6 +14,8 @@ export class ButtonsComponent {
 	@Input() pokemonData: PokemonData | null = null;
 
 	selectedTypes: string[] = [];
+	submissionMessage: string = '';
+	isCorrect: boolean = false;
 
 	onTypeSelectionChange(event: { type: string; isChecked: boolean }): void {
 		if (event.isChecked) {
@@ -38,17 +40,21 @@ export class ButtonsComponent {
 					(type, index) => type === selectedTypesSorted[index]
 				)
 			) {
-				alert('Correct! You guessed all the types!');
+				this.submissionMessage = 'Correct! Well done!';
+				this.isCorrect = true;
 			} else {
-				alert(
-					`Incorrect. The correct types are: ${correctTypes.join(
-						', '
-					)}.`
-				);
+				this.submissionMessage = `Oops! The correct type${
+					this.pokemonData.types.length > 1 ? 's are' : ' is'
+				} ${this.pokemonData.types.join(' and ')}.`;
+				this.isCorrect = false;
 			}
+
+			setTimeout(() => {
+				this.submissionMessage = '';
+				window.location.reload();
+			}, 3000);
 		} else {
 			alert('No Pokemon data available to check types.');
 		}
-		window.location.reload();
 	}
 }

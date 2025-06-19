@@ -1,9 +1,54 @@
 @use "../../styles/variables" as var;
 
+.submission-feedback {
+	padding: 0.5rem 1rem;
+	margin-top: 1.25rem;
+	border-radius: 8px;
+
+	font-size: 1.125rem;
+	text-align: center;
+	color: white;
+
+	opacity: 1;
+	animation: fadeInOut 3.5s forwards;
+
+	&.success {
+		background-color: var.$success;
+	}
+
+	&.error {
+		background-color: var.$error;
+	}
+}
+
+@keyframes fadeInOut {
+	0% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	10% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	90% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+}
+
 .submit-button {
 	color: white;
-	background-color: #3c373f;
+	background-color: black;
 	text-transform: uppercase;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 
 	@media (max-width: 600px) {
 		font-size: 1rem;

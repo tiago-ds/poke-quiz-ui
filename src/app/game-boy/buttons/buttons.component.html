@@ -6,7 +6,15 @@
 		></quiz-option>
 	</div>
 </div>
+<div
+	*ngIf="submissionMessage"
+	class="submission-feedback w-50"
+	[ngClass]="{ success: isCorrect, error: !isCorrect }"
+>
+	{{ submissionMessage }}
+</div>
 <button
+	*ngIf="!submissionMessage"
 	class="submit-button d-block mx-auto mt-5 mb-1 p-2 w-auto rounded-5"
 	(click)="onSubmit()"
 	[disabled]="!selectedTypes.length"
