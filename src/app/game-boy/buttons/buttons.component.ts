@@ -49,5 +49,6 @@ export class ButtonsComponent {
 		} else {
 			alert('No Pokemon data available to check types.');
 		}
+		window.location.reload();
 	}
 }

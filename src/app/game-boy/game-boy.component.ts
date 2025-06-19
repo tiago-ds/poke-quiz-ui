@@ -69,26 +69,4 @@ export class GameBoyComponent {
 			);
 		}
 	}
-
-	onSubmit(): void {
-		if (this.pokemonData) {
-			const correctTypes = this.pokemonData.types.sort();
-			const selectedTypesSorted = this.selectedTypes.sort();
-
-			if (
-				correctTypes.length === selectedTypesSorted.length &&
-				correctTypes.every(
-					(type, index) => type === selectedTypesSorted[index]
-				)
-			) {
-				alert('Correct! You guessed all the types!');
-			} else {
-				alert(
-					`Incorrect. The correct types are: ${correctTypes.join(
-						', '
-					)}.`
-				);
-			}
-		}
-	}
 }
