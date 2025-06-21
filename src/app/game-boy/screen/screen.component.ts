@@ -19,7 +19,7 @@ export class ScreenComponent implements OnInit, OnChanges {
 
 	backgroundUrl: string = '';
 
-	private backgroundPrefix = 'assets/';
+	private backgroundPrefix = 'assets/backgrounds/';
 
 	private setRandomBackground(): void {
 		if (this.backgroundImages.length === 0) {
