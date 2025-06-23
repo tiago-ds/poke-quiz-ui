@@ -1,0 +1,21 @@
+<div class="d-flex flex-column align-items-center">
+	<span>Which regions would you like to explore?</span>
+	<div class="region-selection-container">
+		<button
+			*ngFor="let region of regions"
+			(click)="selectRegion(region)"
+			[class.selected]="selectedRegions.includes(region.name)"
+			[style.background-image]="'url(' + region.badgeImage + ')'"
+			class="region-button"
+		>
+			<span class="region-label">{{ region.name }}</span>
+		</button>
+	</div>
+	<button
+		class="submit-regions mb-3 rounded-3 button button-primary"
+		(click)="confirmRegions()"
+		[disabled]="selectedRegions.length === 0 && regionsChanged"
+	>
+		submit regions
+	</button>
+</div>

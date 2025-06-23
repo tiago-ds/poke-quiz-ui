@@ -1,7 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {
+	Component,
+	Input,
+	OnChanges,
+	OnInit,
+	SimpleChange,
+	SimpleChanges,
+} from '@angular/core';
 import { PokemonData } from '../types';
-import { generateTypeQuestion } from '../utils/utils';
+import { generateTypeQuestion, getRandomDexNumber } from '../utils/utils';
 import { CommonModule } from '@angular/common';
 import { ScreenComponent } from './screen/screen.component';
 import { ButtonsComponent } from './buttons/buttons.component';
@@ -12,30 +19,35 @@ import { ButtonsComponent } from './buttons/buttons.component';
 	templateUrl: './game-boy.component.html',
 	styleUrl: './game-boy.component.scss',
 })
-export class GameBoyComponent implements OnInit {
+export class GameBoyComponent implements OnChanges {
 	pokemonData: PokemonData | null = null;
-	quizOptions: Array<string> = [];
+	quizOptions: Array<string> = ['empty', 'empty', 'empty', 'empty'];
 	selectedTypes: string[] = [];
 	public boundRenderPokemonData!: () => void;
 
+	@Input()
+	selectedRegions: string[] = [];
+
 	constructor(private http: HttpClient) {}
 
-	ngOnInit() {
-		this.boundRenderPokemonData = this.renderPokemonData.bind(this);
-		this.renderPokemonData();
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['selectedRegions']) {
+			this.onConfirmRegions();
+		}
+	}
 
-		// Mocked data to avoid too many requests for the API
-		// this.pokemonData = {
-		// 	pokemonName: 'belossom',
-		// 	types: ['grass', 'poison'],
-		// 	spriteUrl:
-		// 		'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png',
-		// };
-		// this.quizOptions = generateTypeQuestion(this.pokemonData.types);
+	onConfirmRegions() {
+		this.boundRenderPokemonData = () => this.renderPokemonData();
+		this.renderPokemonData();
 	}
 
 	renderPokemonData(): void {
-		const pokemonNumber = Math.floor(Math.random() * 386) + 1;
+		const pokemonNumber = getRandomDexNumber(this.selectedRegions);
+
+		if (!pokemonNumber) {
+			return;
+		}
+
 		const URLRequest = `https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`;
 		this.http.get(URLRequest).subscribe({
 			next: (res: any) => {
@@ -60,17 +72,16 @@ export class GameBoyComponent implements OnInit {
 				);
 			},
 		});
-	}
 
-	onTypeSelectionChange(event: { type: string; isChecked: boolean }): void {
-		if (event.isChecked) {
-			if (!this.selectedTypes.includes(event.type)) {
-				this.selectedTypes.push(event.type);
-			}
-		} else {
-			this.selectedTypes = this.selectedTypes.filter(
-				(t) => t !== event.type
-			);
+		// Mocked data to avoid too many requests for the API
+		// this.pokemonData = {
+		// 	pokemonName: 'belossom',
+		// 	types: ['grass', 'poison'],
+		// 	spriteUrl:
+		// 		'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png',
+		// };
+		if (this.pokemonData?.types) {
+			this.quizOptions = generateTypeQuestion(this.pokemonData.types);
 		}
 	}
 }

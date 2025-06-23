@@ -9,7 +9,7 @@
 </div>
 <div
 	*ngIf="submissionMessage"
-	class="submission-feedback w-50 position-absolute mt-5"
+	class="submission-feedback position-absolute mt-5"
 	[ngClass]="{ success: isCorrect, error: !isCorrect }"
 >
 	{{ submissionMessage }}

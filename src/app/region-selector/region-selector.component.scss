@@ -1,0 +1,92 @@
+/* src/app/region-selector/region-selector.component.scss */
+
+.region-selection-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+	max-width: 600px;
+	margin: 20px auto;
+	padding: 10px;
+	justify-items: center;
+}
+
+.region-button {
+	position: relative;
+	background-color: transparent;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+
+	filter: grayscale(100%);
+
+	width: 120px;
+	height: 120px;
+
+	@media (max-width: 600px) {
+		width: 75px;
+		height: 75px;
+	}
+
+	@media (max-width: 400px) {
+		width: 50px;
+		height: 50px;
+	}
+
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	padding-bottom: 10px;
+	overflow: hidden;
+
+	&:hover {
+		filter: sepia(100%) brightness(1.1);
+	}
+
+	&.selected {
+		filter: grayscale(0%);
+	}
+
+	.region-label {
+		position: absolute;
+		bottom: 5px;
+		padding: 4px 8px;
+		background-color: rgba(0, 0, 0, 0.5);
+		color: white;
+		border-radius: 10px;
+		font-size: 0.8em;
+		font-weight: bold;
+		text-transform: uppercase;
+		white-space: nowrap;
+		pointer-events: none;
+
+		@media (max-width: 600px) {
+			font-size: 0.5em;
+			padding: 2px 4px;
+			bottom: 0;
+			border-radius: 5px;
+		}
+	}
+}
+
+.submit-regions {
+	color: white;
+	background-color: black;
+	text-transform: uppercase;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	@media (max-width: 600px) {
+		font-size: 1rem;
+	}
+
+	@media (max-width: 400px) {
+		font-size: 0.875rem;
+	}
+}

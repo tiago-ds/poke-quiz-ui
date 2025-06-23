@@ -9,7 +9,7 @@ import { PokemonData } from '../../types';
 	templateUrl: './buttons.component.html',
 	styleUrl: './buttons.component.scss',
 })
-export class ButtonsComponent implements OnChanges {
+export class ButtonsComponent {
 	@Input() options: string[] = [];
 	@Input() pokemonData: PokemonData | null = null;
 	@Input() renderPokemonData: () => void = () => {};
@@ -17,23 +17,6 @@ export class ButtonsComponent implements OnChanges {
 	selectedTypes: string[] = [];
 	submissionMessage: string = '';
 	isCorrect: boolean = false;
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (
-			changes['pokemonData'] &&
-			changes['pokemonData'].currentValue !==
-				changes['pokemonData'].previousValue
-		) {
-			console.log(
-				'ButtonsComponent: New Pokémon data detected. Resetting state.'
-			);
-			this.selectedTypes = []; // Clear previously selected types
-			this.submissionMessage = ''; // Clear previous feedback message
-			this.isCorrect = false; // Reset correctness flag
-			// The individual quiz-option components will also need to reset their visual state
-			// This will be handled by passing the `isChecked` prop in the HTML (see Step 3).
-		}
-	}
 
 	onTypeSelectionChange(event: { type: string; isChecked: boolean }): void {
 		if (event.isChecked) {
@@ -48,6 +31,8 @@ export class ButtonsComponent implements OnChanges {
 	}
 
 	onSubmit(): void {
+		console.log(this.pokemonData);
+		console.log(this.selectedTypes);
 		if (this.pokemonData) {
 			const correctTypes = this.pokemonData.types.sort();
 			const selectedTypesSorted = this.selectedTypes.sort();
@@ -69,8 +54,11 @@ export class ButtonsComponent implements OnChanges {
 
 			setTimeout(() => {
 				this.submissionMessage = '';
+				this.isCorrect = false;
+				this.selectedTypes = [];
+
 				this.renderPokemonData();
-			}, 3000);
+			}, 2000);
 		} else {
 			alert('No Pokemon data available to check types.');
 		}

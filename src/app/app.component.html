@@ -1,6 +1,8 @@
 <main
-	class="main d-flex flex-column flex-lg-row justify-content-center align-items-center"
+	class="main d-flex flex-column flex-lg-row justify-content-center align-items-center gap-4"
 >
-	<app-configure-quiz></app-configure-quiz>
-	<app-game-boy></app-game-boy>
+	<app-region-selector
+		(regionsConfirmed)="onSelectedRegionsChange($event)"
+	></app-region-selector>
+	<app-game-boy [selectedRegions]="selectedRegions"></app-game-boy>
 </main>

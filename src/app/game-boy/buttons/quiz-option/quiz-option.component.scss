@@ -124,3 +124,24 @@
 .type-fairy {
 	background-color: var.$type-fairy;
 }
+
+.type-empty {
+	color: var.$pokedex-red;
+
+	input[type="checkbox"] {
+		border-color: var.$pokedex-red;
+		background-color: var.$pokedex-red;
+
+		cursor: auto;
+
+		transition: background-image 0.3s ease, transform 0.2s ease;
+
+		&:hover {
+			transform: none;
+		}
+
+		&:checked {
+			background: none;
+		}
+	}
+}
