@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { QuizOptionComponent } from './quiz-option/quiz-option.component';
 import { PokemonData } from '../../types';
 
@@ -18,6 +18,11 @@ export class ButtonsComponent {
 	submissionMessage: string = '';
 	isCorrect: boolean = false;
 
+	@Output() guessSubmitted = new EventEmitter<{
+		isCorrect: boolean;
+		pointsAwarded: number;
+	}>();
+
 	onTypeSelectionChange(event: { type: string; isChecked: boolean }): void {
 		if (event.isChecked) {
 			if (!this.selectedTypes.includes(event.type)) {
@@ -31,8 +36,6 @@ export class ButtonsComponent {
 	}
 
 	onSubmit(): void {
-		console.log(this.pokemonData);
-		console.log(this.selectedTypes);
 		if (this.pokemonData) {
 			const correctTypes = this.pokemonData.types.sort();
 			const selectedTypesSorted = this.selectedTypes.sort();
@@ -45,11 +48,17 @@ export class ButtonsComponent {
 			) {
 				this.submissionMessage = 'Correct! Well done!';
 				this.isCorrect = true;
+				this.guessSubmitted.emit({ isCorrect: true, pointsAwarded: 1 });
 			} else {
 				this.submissionMessage = `Oops! The correct type${
 					this.pokemonData.types.length > 1 ? 's are' : ' is'
 				} ${this.pokemonData.types.join(' and ')}.`;
 				this.isCorrect = false;
+
+				this.guessSubmitted.emit({
+					isCorrect: false,
+					pointsAwarded: -1,
+				});
 			}
 
 			setTimeout(() => {

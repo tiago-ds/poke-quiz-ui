@@ -1,0 +1,41 @@
+@use "../styles/variables" as var;
+
+.battle-hud-container {
+	background-color: #282c34;
+	border: 2px solid #5a5f6e;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+	font-family: "Press Start 2P", cursive;
+	min-width: 200px;
+	color: var.$pokedex-white;
+
+	.hud-section {
+		padding: 5px 0;
+
+		.hud-value {
+			font-size: 1.8em;
+			font-weight: bold;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+		}
+
+		.hud-label {
+			font-size: 0.9em;
+			margin-right: 8px;
+		}
+	}
+
+	.streak-section {
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+		.streak-label {
+			font-size: 1.1em;
+		}
+
+		.streak-multiplier {
+			font-size: 1.2em;
+			font-weight: bold;
+			margin-left: 5px;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+		}
+	}
+}

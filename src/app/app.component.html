@@ -4,5 +4,12 @@
 	<app-region-selector
 		(regionsConfirmed)="onSelectedRegionsChange($event)"
 	></app-region-selector>
-	<app-game-boy [selectedRegions]="selectedRegions"></app-game-boy>
+	<app-game-boy
+		(quizResult)="onQuizResult($event)"
+		[selectedRegions]="selectedRegions"
+	></app-game-boy>
+	<app-score-counter
+		[currentScore]="totalScore"
+		[currentStreak]="currentStreak"
+	/>
 </main>

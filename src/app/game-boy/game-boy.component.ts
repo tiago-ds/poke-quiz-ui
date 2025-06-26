@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import {
 	Component,
+	EventEmitter,
 	Input,
 	OnChanges,
 	OnInit,
+	Output,
 	SimpleChange,
 	SimpleChanges,
 } from '@angular/core';
@@ -28,6 +30,11 @@ export class GameBoyComponent implements OnChanges {
 	@Input()
 	selectedRegions: string[] = [];
 
+	@Output() quizResult = new EventEmitter<{
+		isCorrect: boolean;
+		pointsAwarded: number;
+	}>();
+
 	constructor(private http: HttpClient) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -39,6 +46,13 @@ export class GameBoyComponent implements OnChanges {
 	onConfirmRegions() {
 		this.boundRenderPokemonData = () => this.renderPokemonData();
 		this.renderPokemonData();
+	}
+
+	onQuizSubmit(event: { isCorrect: boolean; pointsAwarded: number }) {
+		this.quizResult.emit({
+			isCorrect: event.isCorrect,
+			pointsAwarded: event.pointsAwarded,
+		});
 	}
 
 	renderPokemonData(): void {
