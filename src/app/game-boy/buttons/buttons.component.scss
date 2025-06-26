@@ -41,13 +41,28 @@
 }
 
 .submit-button {
-	color: white;
-	background-color: black;
+	background-color: #3d424b;
+	border: 2px solid #5a5f6e;
+	border-radius: 4px;
+	color: var.$pokedex-white;
+	padding: 10px 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease,
+		box-shadow 0.2s ease;
+
 	text-transform: uppercase;
+
+	&:hover:not(:disabled) {
+		background-color: #4a505b;
+		border-color: var.$pokedex-blue;
+	}
 
 	&:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
+		background-color: var.$pokedex-black;
+		border-color: #444;
 	}
 
 	@media (max-width: 600px) {
