@@ -17,9 +17,9 @@ The application is currently hosted on **GitHub Pages**. You can access it [here
 
 ## Todo List
 
--   [ ] Add a scoring system.
--   [ ] Add options to change the difficulty.
--   [ ] Add an option to select the regions dynamically.
+-   [x] Add a scoring system.
+-   [x] Add an option to select the regions dynamically.
+-   [ ] Create a multiplier according to the streak
 -   [ ] Create more quizzes!
 
 ## Acknowledgments
