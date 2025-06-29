@@ -1,15 +1,20 @@
-<main
-	class="main d-flex flex-column flex-lg-row justify-content-center align-items-center gap-4"
->
-	<app-region-selector
-		(regionsConfirmed)="onSelectedRegionsChange($event)"
-	></app-region-selector>
+<main class="main row justify-content-around align-items-center">
+	<div
+		class="col-12 col-md-6 justify-content-center align-items-center d-flex flex-column"
+	>
+		<app-score-counter
+			[currentScore]="totalScore"
+			[currentStreak]="currentStreak"
+			class="row w-50 align-self-center align-self-md-start mx-md-4"
+		/>
+		<app-region-selector
+			(regionsConfirmed)="onSelectedRegionsChange($event)"
+			class="row mt-5 align-self-cente align-self-md-start mx-4 mb-4"
+		></app-region-selector>
+	</div>
 	<app-game-boy
 		(quizResult)="onQuizResult($event)"
 		[selectedRegions]="selectedRegions"
+		class="col-12 col-md-6 mt-md-5 justify-content-center align-items-center align-items-center"
 	></app-game-boy>
-	<app-score-counter
-		[currentScore]="totalScore"
-		[currentStreak]="currentStreak"
-	/>
 </main>
