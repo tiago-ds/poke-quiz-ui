@@ -1,21 +1,29 @@
-<div class="game-dex d-flex flex-column justify-content-around">
-	<div class="screen">
-		<div class="black-screen d-flex flex-column align-items-center">
-			<div class="white-screen">
-				<p *ngIf="!quizOptions">Loading Pokémon data...</p>
-				<app-screen
-					*ngIf="pokemonData"
-					[pokemonData]="pokemonData"
-				></app-screen>
-			</div>
-			<h1 class="align-self-start mt-2">POKÉ QUIZ</h1>
+<div class="game-dex flex flex-col">
+	<!-- Screen -->
+	<div class="black-screen flex min-h-0 flex-col">
+		<div class="white-screen flex min-h-0 flex-1 flex-col overflow-hidden">
+			<app-screen
+				*ngIf="pokemonData; else screenPlaceholder"
+				[pokemonData]="pokemonData"
+				[isLoading]="isLoading"
+				class="flex min-h-0 flex-1 flex-col"
+			/>
+			<ng-template #screenPlaceholder>
+				<p class="screen-placeholder m-auto px-4 text-center">
+					Pick your regions to start.
+				</p>
+			</ng-template>
 		</div>
+		<h1 class="mt-2 shrink-0 self-start">POKÉ QUIZ</h1>
 	</div>
+
+	<!-- Controls -->
 	<app-buttons
 		[options]="quizOptions"
 		[pokemonData]="pokemonData"
-		[renderPokemonData]="boundRenderPokemonData"
-		(guessSubmitted)="onQuizSubmit($event)"
-		class="d-flex flex-column align-items-center"
-	></app-buttons>
+		[isLoading]="isLoading"
+		(guessSubmitted)="quizResult.emit($event)"
+		(roundFinished)="loadNextPokemon()"
+		class="flex min-h-0 flex-1 flex-col"
+	/>
 </div>

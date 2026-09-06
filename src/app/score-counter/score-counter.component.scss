@@ -1,13 +1,16 @@
-@use "../styles/variables" as var;
+@use "../styles/mixins" as m;
+@use "../styles/variables" as v;
 
 .battle-hud-container {
-	background-color: #282c34;
-	border: 2px solid #5a5f6e;
-	border-radius: 8px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-	font-family: "Press Start 2P", cursive;
+	@include m.hud-panel;
+
 	min-width: 200px;
-	color: var.$pokedex-white;
+
+	@include m.below(v.$bp-sm) {
+		.hud-value {
+			font-size: 1.4em;
+		}
+	}
 
 	.hud-section {
 		padding: 5px 0;

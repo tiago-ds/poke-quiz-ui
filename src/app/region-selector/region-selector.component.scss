@@ -1,38 +1,64 @@
-@use "../styles/variables" as var;
+@use "../styles/mixins" as m;
+@use "../styles/variables" as v;
 
 .region-selector-hud-container {
-	background-color: #282c34;
-	border: 2px solid #5a5f6e;
-	border-radius: 8px;
-	padding: 20px 25px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-	font-family: "Press Start 2P", cursive;
-	color: var.$pokedex-white;
+	@include m.hud-panel;
+
 	box-sizing: border-box;
-	max-width: 100%;
+	width: 100%;
+	padding: 20px 25px;
+
+	@include m.below(v.$bp-sm) {
+		padding: 12px 14px;
+	}
 }
 
 .hud-label-main {
+	color: v.$hud-text-muted;
 	font-size: 12px;
 	text-align: center;
 	margin-bottom: 1rem;
-	color: #e0e0e0;
+
+	@include m.below(v.$bp-sm) {
+		font-size: 10px;
+		margin-bottom: 0.5rem;
+	}
 }
 
 .region-selection-container {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: 1rem;
 
-	margin: 0 auto;
+	width: 100%;
+	margin: 0 auto 20px;
 	padding: 10px;
 	justify-items: center;
-	margin-bottom: 20px;
+
+	// Phones are short, not narrow: a wider, flatter grid leaves room for the
+	// console below.
+	@include m.below(v.$bp-sm) {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.5rem;
+		padding: 2px;
+		margin-bottom: 10px;
+	}
 }
 
 .region-button {
 	position: relative;
-	background-color: #3d424b;
+	overflow: hidden;
+
+	width: 100%;
+	max-width: 120px;
+	aspect-ratio: 1;
+	padding-bottom: 10px;
+
+	background-color: v.$control-bg;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 80%;
+
 	border: 2px solid transparent;
 	border-radius: 50%;
 	cursor: pointer;
@@ -40,37 +66,19 @@
 	filter: grayscale(100%) brightness(0.7);
 	transition: filter 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
-	width: 120px;
-	height: 120px;
-
-	@media (max-width: 600px) {
-		width: 75px;
-		height: 75px;
+	@include m.below(v.$bp-sm) {
+		max-width: 58px;
+		padding-bottom: 4px;
 	}
-
-	@media (max-width: 400px) {
-		width: 50px;
-		height: 50px;
-	}
-
-	background-size: 80%;
-	background-repeat: no-repeat;
-	background-position: center;
-
-	display: flex;
-	align-items: flex-end;
-	justify-content: center;
-	padding-bottom: 10px;
-	overflow: hidden;
 
 	&:hover {
 		filter: sepia(100%) brightness(1.2);
-		border-color: var.$pokemon-orange-light;
+		border-color: v.$pokemon-orange-light;
 	}
 
 	&.selected {
 		filter: grayscale(0%) brightness(1);
-		border-color: var.$pokedex-blue;
+		border-color: v.$pokedex-blue;
 		box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
 	}
 
@@ -78,56 +86,43 @@
 		position: absolute;
 		bottom: 5px;
 		padding: 4px 8px;
+
 		background-color: rgba(0, 0, 0, 0.7);
-		color: var.$pokedex-white;
 		border-radius: 10px;
+		color: v.$pokedex-white;
+
+		font-family: v.$font-hud;
 		font-size: 0.8em;
 		font-weight: bold;
 		text-transform: uppercase;
 		white-space: nowrap;
 		pointer-events: none;
-		font-family: "Press Start 2P", cursive;
 
-		@media (max-width: 600px) {
-			font-size: 0.5em;
-			padding: 2px 4px;
+		@include m.below(v.$bp-sm) {
+			font-size: 7px;
+			letter-spacing: -0.5px;
+			padding: 1px 3px;
 			bottom: 0;
 			border-radius: 5px;
 		}
 	}
 }
 
-.submit-regions.btn {
-	background-color: #3d424b;
-	border: 2px solid #5a5f6e;
-	border-radius: 4px;
-	color: var.$pokedex-white;
-	padding: 10px 20px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-	cursor: pointer;
-	transition: background-color 0.2s ease, border-color 0.2s ease,
-		box-shadow 0.2s ease;
+.submit-regions {
+	@include m.control-button;
 
 	font-size: 12px;
 
 	&:hover:not(:disabled) {
-		background-color: #4a505b;
-		border-color: var.$pokemon-orange-light;
+		border-color: v.$pokemon-orange-light;
 	}
 
-	&:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-		background-color: var.$pokedex-black;
-		border-color: #444;
-	}
-
-	@media (max-width: 600px) {
+	@include m.below(v.$bp-sm) {
 		font-size: 0.9em;
 		padding: 8px 15px;
 	}
 
-	@media (max-width: 400px) {
+	@include m.below(v.$bp-xs) {
 		font-size: 0.7em;
 		padding: 6px 12px;
 	}

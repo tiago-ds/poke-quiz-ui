@@ -1,12 +1,10 @@
-<div class="battle-hud-container d-flex flex-column gap-1 px-3 py-2">
-	<div class="hud-section score-section justify-content-start">
+<div class="battle-hud-container flex flex-col gap-1 px-3 py-2">
+	<div class="hud-section score-section">
 		<span class="hud-value score-value">₽ {{ currentScore }}</span>
 	</div>
 
-	<div
-		class="hud-section d-flex align items-center streak-section justify-content-start pt-2"
-	>
-		<span class="hud-label streak-label text-uppercase">STREAK</span>
+	<div class="hud-section streak-section flex items-center pt-2">
+		<span class="hud-label streak-label uppercase">STREAK</span>
 		<span class="streak-multiplier">x{{ currentStreak }}</span>
 	</div>
 </div>

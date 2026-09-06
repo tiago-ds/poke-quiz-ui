@@ -1,101 +1,66 @@
-import { HttpClient } from '@angular/common/http';
+import { NgIf } from '@angular/common';
 import {
 	Component,
 	EventEmitter,
 	Input,
 	OnChanges,
-	OnInit,
 	Output,
-	SimpleChange,
-	SimpleChanges,
+	inject,
 } from '@angular/core';
-import { PokemonData } from '../types';
+import { OPTIONS_PER_QUESTION, PLACEHOLDER_TYPE } from '../data/pokemon-types';
+import { PokemonService } from '../services/pokemon.service';
+import { PokemonData, QuizResult } from '../types';
 import { generateTypeQuestion, getRandomDexNumber } from '../utils/utils';
-import { CommonModule } from '@angular/common';
-import { ScreenComponent } from './screen/screen.component';
 import { ButtonsComponent } from './buttons/buttons.component';
+import { ScreenComponent } from './screen/screen.component';
+
+const placeholderOptions = () =>
+	new Array(OPTIONS_PER_QUESTION).fill(PLACEHOLDER_TYPE);
 
 @Component({
 	selector: 'app-game-boy',
-	imports: [CommonModule, ScreenComponent, ButtonsComponent],
+	imports: [NgIf, ScreenComponent, ButtonsComponent],
 	templateUrl: './game-boy.component.html',
 	styleUrl: './game-boy.component.scss',
 })
 export class GameBoyComponent implements OnChanges {
+	private readonly pokemonService = inject(PokemonService);
+
 	pokemonData: PokemonData | null = null;
-	quizOptions: Array<string> = ['empty', 'empty', 'empty', 'empty'];
-	selectedTypes: string[] = [];
-	public boundRenderPokemonData!: () => void;
+	quizOptions: string[] = placeholderOptions();
+	isLoading = false;
 
-	@Input()
-	selectedRegions: string[] = [];
+	@Input() selectedRegions: string[] = [];
 
-	@Output() quizResult = new EventEmitter<{
-		isCorrect: boolean;
-		pointsAwarded: number;
-	}>();
+	@Output() quizResult = new EventEmitter<QuizResult>();
 
-	constructor(private http: HttpClient) {}
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['selectedRegions']) {
-			this.onConfirmRegions();
-		}
+	ngOnChanges(): void {
+		this.loadNextPokemon();
 	}
 
-	onConfirmRegions() {
-		this.boundRenderPokemonData = () => this.renderPokemonData();
-		this.renderPokemonData();
-	}
+	loadNextPokemon(): void {
+		const dexNumber = getRandomDexNumber(this.selectedRegions);
 
-	onQuizSubmit(event: { isCorrect: boolean; pointsAwarded: number }) {
-		this.quizResult.emit({
-			isCorrect: event.isCorrect,
-			pointsAwarded: event.pointsAwarded,
-		});
-	}
-
-	renderPokemonData(): void {
-		const pokemonNumber = getRandomDexNumber(this.selectedRegions);
-
-		if (!pokemonNumber) {
+		if (dexNumber === null) {
 			return;
 		}
 
-		const URLRequest = `https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`;
-		this.http.get(URLRequest).subscribe({
-			next: (res: any) => {
-				const { name, types, sprites } = res;
+		this.isLoading = true;
 
-				this.pokemonData = {
-					pokemonName: name,
-					types: types.map((type: any) => type.type.name),
-					spriteUrl: sprites.front_default,
-				};
-
-				if (this.pokemonData?.types) {
-					this.quizOptions = generateTypeQuestion(
-						this.pokemonData.types
-					);
-				}
+		this.pokemonService.getByDexNumber(dexNumber).subscribe({
+			next: (pokemon) => {
+				this.pokemonData = pokemon;
+				this.quizOptions = generateTypeQuestion(pokemon.types);
+				this.isLoading = false;
 			},
 			error: (err) => {
+				this.isLoading = false;
+
 				console.error(
 					'An error occurred while fetching Pokemon data:',
 					err
 				);
 			},
 		});
-
-		// Mocked data to avoid too many requests for the API
-		// this.pokemonData = {
-		// 	pokemonName: 'belossom',
-		// 	types: ['grass', 'poison'],
-		// 	spriteUrl:
-		// 		'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/182.png',
-		// };
-		if (this.pokemonData?.types) {
-			this.quizOptions = generateTypeQuestion(this.pokemonData.types);
-		}
 	}
 }

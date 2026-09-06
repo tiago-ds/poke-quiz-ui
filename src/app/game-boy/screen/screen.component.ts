@@ -1,51 +1,29 @@
-import {
-	Component,
-	Input,
-	OnChanges,
-	OnInit,
-	SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PokemonData } from '../../types';
-import { CommonModule } from '@angular/common';
+
+const BACKGROUNDS = ['city', 'desert', 'forest', 'savannah', 'snow'];
 
 @Component({
 	selector: 'app-screen',
-	imports: [CommonModule],
 	templateUrl: './screen.component.html',
 	styleUrl: './screen.component.scss',
 })
-export class ScreenComponent implements OnInit, OnChanges {
-	@Input() pokemonData: PokemonData | null = null;
+export class ScreenComponent implements OnChanges {
+	@Input() pokemonData!: PokemonData;
 
-	backgroundUrl: string = '';
+	@Input() isLoading = false;
 
-	private backgroundPrefix = 'assets/backgrounds/';
+	backgroundUrl = '';
 
-	private setRandomBackground(): void {
-		if (this.backgroundImages.length === 0) {
+	/** Each new Pokémon lands in a different habitat. */
+	ngOnChanges(changes: SimpleChanges): void {
+		if (!changes['pokemonData']) {
 			return;
 		}
-		const randomIndex = Math.floor(
-			Math.random() * this.backgroundImages.length
-		);
-		this.backgroundUrl = `${this.backgroundPrefix}${this.backgroundImages[randomIndex]}-bg.png`;
-	}
 
-	private backgroundImages: string[] = [
-		'city',
-		'desert',
-		'forest',
-		'savannah',
-		'snow',
-	];
+		const background =
+			BACKGROUNDS[Math.floor(Math.random() * BACKGROUNDS.length)];
 
-	ngOnInit(): void {
-		this.setRandomBackground();
-	}
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['pokemonData'] && changes['pokemonData'].currentValue) {
-			this.setRandomBackground();
-		}
+		this.backgroundUrl = `assets/backgrounds/${background}-bg.png`;
 	}
 }

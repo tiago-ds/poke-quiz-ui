@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Breakpoints kept in sync with src/app/styles/_variables.scss. */
+@theme {
+	--breakpoint-xs: 25rem;
+	--breakpoint-sm: 37.5rem;
+	--breakpoint-md: 48rem;
+}

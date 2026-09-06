@@ -1,24 +1,47 @@
-@use "../../styles/variables" as var;
+@use "../../styles/variables" as v;
 
-.header-container {
-	.question {
-		color: var.$pokedex-black;
-		margin: 0.5rem 0 0 0.5rem;
+.question {
+	margin: 0;
+	padding: 0.4rem 0.5rem 0;
 
-		.pokemon-name {
-			font-weight: 600;
-		}
+	color: v.$pokedex-black;
+	font-size: clamp(0.75rem, 5.2cqw, 1.6rem);
+	line-height: 1.25;
+
+	// Always reserve two lines so a short name and a long one put the
+	// sprite in exactly the same place.
+	min-height: 2.5em;
+
+	.pokemon-name {
+		font-weight: 600;
+		text-transform: capitalize;
 	}
+}
 
-	.pokemon-sprite {
-		background-position: center;
-		background-size: cover;
+.pokemon-sprite {
+	// Absolutely positioned so the percentage caps resolve against a box
+	// with a definite height, then centred by the auto margins. Without
+	// this the auto-sized track lets the sprite overflow the screen.
+	position: absolute;
+	inset: 4%;
+	margin: auto;
 
-		display: block;
-		margin: 0 auto;
+	height: clamp(2.5rem, 32cqw, 13rem);
+	width: auto;
+	aspect-ratio: 1;
+	max-height: 100%;
+	max-width: 100%;
 
-		@media (min-width: 768px) {
-			scale: 1.5;
-		}
+	background-position: center;
+	background-size: cover;
+	border-radius: 50%;
+
+	object-fit: contain;
+	image-rendering: pixelated;
+
+	transition: opacity 0.2s ease;
+
+	&.is-loading {
+		opacity: 0.35;
 	}
 }

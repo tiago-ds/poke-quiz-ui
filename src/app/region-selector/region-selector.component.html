@@ -1,6 +1,4 @@
-<div
-	class="region-selector-hud-container d-flex flex-column align-items-center shadow-lg g-1"
->
+<div class="region-selector-hud-container flex flex-col items-center">
 	<span class="hud-label-main mb-3"
 		>Which regions would you like to explore?</span
 	>
@@ -8,19 +6,22 @@
 	<div class="region-selection-container mb-4">
 		<button
 			*ngFor="let region of regions"
-			(click)="selectRegion(region)"
+			type="button"
+			(click)="toggleRegion(region)"
 			[class.selected]="selectedRegions.includes(region.name)"
 			[style.background-image]="'url(' + region.badgeImage + ')'"
-			class="region-button d-flex align-items-end justify-content-center"
+			[attr.aria-pressed]="selectedRegions.includes(region.name)"
+			class="region-button flex items-end justify-center"
 		>
 			<span class="region-label">{{ region.name }}</span>
 		</button>
 	</div>
 
 	<button
-		class="submit-regions btn text-uppercase"
+		type="button"
+		class="submit-regions uppercase"
 		(click)="confirmRegions()"
-		[disabled]="selectedRegions.length === 0 && regionsChanged"
+		[disabled]="selectedRegions.length === 0"
 	>
 		submit regions
 	</button>

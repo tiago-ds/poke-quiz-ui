@@ -1,50 +1,57 @@
-@use "../styles/variables" as var;
+@use "../styles/variables" as v;
+
+:host {
+	min-height: 0;
+	min-width: 0;
+}
 
 .game-dex {
-	background-color: var.$pokedex-red;
+	aspect-ratio: 65 / 91;
+	box-sizing: border-box;
+	height: 100%;
+	width: auto;
+	max-width: 100%;
+	max-height: 100%;
 
-	max-width: 650px;
-	max-height: 910px;
+	background-color: v.$pokedex-red;
+	border: clamp(3px, 0.8%, 5px) solid black;
+	border-radius: 4% 4% 15% 4%;
 
-	width: 100%;
-	height: calc(100vw * 1.4);
+	// Everything inside is laid out in cq units against the console itself,
+	// so the proportions hold at any size.
+	container: dex / size;
+}
 
-	border: 5px solid black;
-	border-radius: 25px 25px 100px 25px;
+// Bands below are measured from the original layout, as a share of the
+// console: screen starts at 12.2% and runs to 52.1%, controls take the rest.
+.black-screen {
+	flex: none;
+	margin: 12.2cqh 10cqw 0;
+	height: 39.9cqh;
+	padding: 3.5cqh 2.3cqw 0;
+	box-sizing: border-box;
 
-	.screen {
-		height: 50%;
+	background-color: v.$pokedex-black;
+	border-radius: 5% 5% 16% 5%;
+}
 
-		.black-screen {
-			background-color: var.$pokedex-black;
+.white-screen {
+	flex: none;
+	height: 25.7cqh;
 
-			margin: 10%;
+	background-color: v.$pokedex-white;
+	border-radius: 2%;
+}
 
-			width: 80%;
-			height: 80%;
-			border-radius: 25px 25px 75px 25px;
+.screen-placeholder {
+	color: v.$pokedex-black;
+	font-size: clamp(0.7rem, 3.4cqw, 1.25rem);
+	opacity: 0.6;
+}
 
-			padding: 5% 5%;
-
-			.white-screen {
-				background-color: #dedede;
-
-				box-sizing: border-box;
-
-				width: 100%;
-				height: 95%;
-
-				border-radius: 10px;
-			}
-
-			h1 {
-				color: white;
-				font-family: fredoka, sans-serif;
-
-				@media (max-width: 600px) {
-					font-size: 1rem;
-				}
-			}
-		}
-	}
+h1 {
+	margin: 1cqh 0 0;
+	color: white;
+	font-size: clamp(0.85rem, 5cqw, 2rem);
+	line-height: 1.2;
 }

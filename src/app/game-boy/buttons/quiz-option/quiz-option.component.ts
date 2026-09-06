@@ -1,34 +1,33 @@
+import { NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+
+/** How an option renders: neutral while answering, marked up once revealed. */
+export type OptionState = 'idle' | 'correct' | 'wrong' | 'faded';
 
 @Component({
 	selector: 'quiz-option',
-	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [NgClass],
 	templateUrl: './quiz-option.component.html',
 	styleUrls: ['./quiz-option.component.scss'],
 })
 export class QuizOptionComponent {
-	@Input()
-	type!: string;
+	@Input() type!: string;
 
-	@Input()
-	isChecked: boolean = false;
+	@Input() isChecked = false;
+
+	@Input() state: OptionState = 'idle';
+
+	@Input() disabled = false;
 
 	@Output() selectionChange = new EventEmitter<{
 		type: string;
 		isChecked: boolean;
 	}>();
 
-	constructor() {}
-
-	ngOnInit() {}
-
-	onCheckboxChange(): void {
+	onCheckboxChange(event: Event): void {
 		this.selectionChange.emit({
 			type: this.type,
-			isChecked: this.isChecked,
+			isChecked: (event.target as HTMLInputElement).checked,
 		});
 	}
 }

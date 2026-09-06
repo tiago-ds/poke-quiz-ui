@@ -1,17 +1,16 @@
-<div
-	[class]="
-		'type-' +
-		type +
-		' quiz-option d-flex flex-wrap align-items-center gap-2 gap-sm-3'
-	"
+<label
+	class="quiz-option flex h-full w-full cursor-pointer items-center gap-2 sm:gap-3"
+	[ngClass]="['type-' + type, 'is-' + state]"
+	[class.is-disabled]="disabled"
 >
 	<input
 		type="checkbox"
-		[id]="type"
 		[name]="'pokemon-type-' + type"
 		[value]="type"
-		[(ngModel)]="isChecked"
-		(change)="onCheckboxChange()"
+		[checked]="isChecked"
+		[disabled]="disabled"
+		(change)="onCheckboxChange($event)"
 	/>
-	<label [for]="type">{{ type }}</label>
-</div>
+	<span class="quiz-option-label">{{ type }}</span>
+	<span class="quiz-option-mark" aria-hidden="true"></span>
+</label>

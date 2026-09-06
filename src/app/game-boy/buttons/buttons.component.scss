@@ -1,75 +1,114 @@
-@use "../../styles/variables" as var;
+@use "../../styles/mixins" as m;
+@use "../../styles/variables" as v;
 
-.submission-feedback {
-	padding: 0.5rem 1rem;
-	margin-top: 1.25rem;
-	border-radius: 8px;
+:host {
+	flex: 1;
+	min-height: 0;
+	padding: 0 7cqw;
+}
 
-	font-size: 1.125rem;
-	text-align: center;
+// Sits in the gap the original left empty between the screen and the
+// options, so revealing an answer never moves anything.
+.feedback-slot {
+	height: 13.1cqh;
+}
+
+.feedback {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+
+	margin: 0;
+	padding: 0.45em 0.9em;
+	max-width: 100%;
+
+	border-radius: 999px;
 	color: white;
+	font-size: clamp(0.65rem, 3.1cqw, 1.05rem);
+	font-weight: 600;
+	line-height: 1.2;
+	text-align: center;
 
-	opacity: 1;
-	animation: fadeInOut 3.5s forwards;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+	animation: feedback-pop 0.28s ease-out;
 
-	&.success {
-		background-color: var.$success;
+	&.is-correct {
+		background-color: v.$success;
 	}
 
-	&.error {
-		background-color: var.$error;
+	&.is-wrong {
+		background-color: v.$error;
 	}
 }
 
-@keyframes fadeInOut {
-	0% {
+.feedback-icon {
+	font-size: 1.1em;
+	line-height: 1;
+}
+
+@keyframes feedback-pop {
+	from {
 		opacity: 0;
-		transform: translateY(-10px);
+		transform: translateY(-6px) scale(0.94);
 	}
-	10% {
+	to {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translateY(0) scale(1);
 	}
-	90% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-	100% {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
+}
+
+.options {
+	height: 19.1cqh;
+	grid-template-rows: repeat(2, 1fr);
+	row-gap: 1.9cqh;
+	column-gap: 2.5cqw;
+}
+
+.primary-action {
+	flex: 1;
+	justify-content: center;
 }
 
 .submit-button {
-	background-color: #3d424b;
-	border: 2px solid #5a5f6e;
-	border-radius: 4px;
-	color: var.$pokedex-white;
-	padding: 10px 20px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-	cursor: pointer;
-	transition: background-color 0.2s ease, border-color 0.2s ease,
-		box-shadow 0.2s ease;
+	@include m.control-button;
 
+	min-width: clamp(6rem, 26cqw, 12rem);
+	padding: 1.1cqh 3cqw;
+	font-size: clamp(0.6rem, 2.5cqw, 1rem);
 	text-transform: uppercase;
 
 	&:hover:not(:disabled) {
-		background-color: #4a505b;
-		border-color: var.$pokedex-blue;
+		border-color: v.$pokedex-blue;
 	}
+}
 
-	&:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-		background-color: var.$pokedex-black;
-		border-color: #444;
+// Drains over the auto-advance delay; pressing the button skips the wait.
+.auto-advance {
+	width: clamp(6rem, 26cqw, 12rem);
+	height: 3px;
+	overflow: hidden;
+
+	background-color: rgba(0, 0, 0, 0.25);
+	border-radius: 999px;
+}
+
+.auto-advance-bar {
+	display: block;
+	height: 100%;
+	width: 100%;
+
+	background-color: v.$pokedex-white;
+	transform-origin: left center;
+	animation-name: drain;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+}
+
+@keyframes drain {
+	from {
+		transform: scaleX(1);
 	}
-
-	@media (max-width: 600px) {
-		font-size: 1rem;
-	}
-
-	@media (max-width: 400px) {
-		font-size: 0.875rem;
+	to {
+		transform: scaleX(0);
 	}
 }

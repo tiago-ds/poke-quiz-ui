@@ -1,147 +1,139 @@
-@use "../../../styles/variables" as var;
+@use "../../../styles/variables" as v;
+
+:host {
+	display: block;
+	min-width: 0;
+}
 
 .quiz-option {
+	position: relative;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0 3cqw;
+
+	border: 2px solid transparent;
+	border-radius: 2.5cqw;
+
+	color: #ffffff;
+	font-size: clamp(0.55rem, 3.1cqw, 1.25rem);
+	font-weight: 600;
+	text-transform: uppercase;
+
+	transition: opacity 0.25s ease, transform 0.2s ease,
+		border-color 0.25s ease;
+
+	&.is-disabled {
+		cursor: default;
+	}
+
 	input[type="checkbox"] {
 		appearance: none;
-		width: 1.5rem;
-		height: 1.5rem;
-
-		@media (max-width: 600px) {
-			width: 1rem;
-			height: 1rem;
-		}
-
+		flex: none;
 		margin: 0;
-		border: 2px solid #ffffff;
-		border-radius: 50%;
+		width: clamp(0.65rem, 3.75cqw, 1.5rem);
+		height: clamp(0.65rem, 3.75cqw, 1.5rem);
 
 		background-color: white;
-		cursor: pointer;
+		border: 2px solid #ffffff;
+		border-radius: 50%;
+		cursor: inherit;
 
 		transition: background-image 0.3s ease, transform 0.2s ease;
-
-		&:hover {
-			transform: scale(1.2);
-		}
 
 		&:checked {
 			background-image: url("../../../../assets/pokeball.svg");
+			background-size: cover;
+			transform: scale(1.2);
+		}
+
+		&:not(:disabled):hover {
 			transform: scale(1.2);
 		}
 	}
+}
 
-	padding: 1.5rem;
-	border-radius: 16px;
+.quiz-option-label {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
 
-	font-weight: 600;
-	text-transform: uppercase;
-	font-size: 1.25rem;
+// Verdict badge, only drawn once the answer is revealed.
+.quiz-option-mark {
+	position: absolute;
+	top: -0.4rem;
+	right: -0.4rem;
 
-	@media (max-width: 600px) {
-		font-size: 1rem;
+	display: grid;
+	place-items: center;
+
+	width: clamp(1rem, 5cqw, 1.5rem);
+	height: clamp(1rem, 5cqw, 1.5rem);
+
+	border-radius: 50%;
+	font-size: clamp(0.55rem, 3cqw, 0.9rem);
+	line-height: 1;
+
+	opacity: 0;
+	transform: scale(0.6);
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.is-correct {
+	border-color: #ffffff;
+	box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+
+	.quiz-option-mark {
+		background-color: v.$success;
+		color: white;
+		content: "";
+		opacity: 1;
+		transform: scale(1);
+
+		&::after {
+			content: "✔";
+		}
 	}
+}
 
-	@media (max-width: 400px) {
-		font-size: 0.875rem;
+.is-wrong {
+	opacity: 0.85;
+
+	.quiz-option-mark {
+		background-color: v.$error;
+		color: white;
+		opacity: 1;
+		transform: scale(1);
+
+		&::after {
+			content: "✕";
+		}
 	}
-
-	color: #ffffff;
-	text-align: center;
 }
 
-.type-normal {
-	background-color: var.$type-normal;
+.is-faded {
+	opacity: 0.35;
 }
 
-.type-dark {
-	background-color: var.$type-dark;
+@each $type, $color in v.$type-colors {
+	.type-#{$type} {
+		background-color: $color;
+	}
 }
 
-.type-fire {
-	background-color: var.$type-fire;
-}
-
-.type-water {
-	background-color: var.$type-water;
-}
-
-.type-grass {
-	background-color: var.$type-grass;
-}
-
-.type-electric {
-	background-color: var.$type-electric;
-}
-
-.type-ice {
-	background-color: var.$type-ice;
-}
-
-.type-fighting {
-	background-color: var.$type-fighting;
-}
-
-.type-poison {
-	background-color: var.$type-poison;
-}
-
-.type-ground {
-	background-color: var.$type-ground;
-}
-
-.type-flying {
-	background-color: var.$type-flying;
-}
-
-.type-psychic {
-	background-color: var.$type-psychic;
-}
-
-.type-bug {
-	background-color: var.$type-bug;
-}
-
-.type-rock {
-	background-color: var.$type-rock;
-}
-
-.type-ghost {
-	background-color: var.$type-ghost;
-}
-
-.type-dragon {
-	background-color: var.$type-dragon;
-}
-
-.type-dark {
-	background-color: var.$type-dark;
-}
-
-.type-steel {
-	background-color: var.$type-steel;
-}
-
-.type-fairy {
-	background-color: var.$type-fairy;
-}
-
+// The four slots before the first Pokémon loads: red on red, inert.
 .type-empty {
-	color: var.$pokedex-red;
+	color: v.$pokedex-red;
+	cursor: default;
 
 	input[type="checkbox"] {
-		border-color: var.$pokedex-red;
-		background-color: var.$pokedex-red;
+		background-color: v.$pokedex-red;
+		border-color: v.$pokedex-red;
+		cursor: default;
 
-		cursor: auto;
-
-		transition: background-image 0.3s ease, transform 0.2s ease;
-
-		&:hover {
-			transform: none;
-		}
-
+		&:hover,
 		&:checked {
 			background: none;
+			transform: none;
 		}
 	}
 }

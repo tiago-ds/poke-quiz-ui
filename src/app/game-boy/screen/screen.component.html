@@ -1,13 +1,17 @@
-<div *ngIf="pokemonData" class="header-container">
-	<h2 class="question">
-		What type(s) does
-		<span class="pokemon-name">{{ pokemonData.pokemonName }}</span>
-		have?
-	</h2>
+<h2 class="question shrink-0">
+	What type(s) does
+	<span class="pokemon-name">{{ pokemonData.pokemonName }}</span>
+	have?
+</h2>
+
+<!-- Takes the leftover height, so a one-line question and a two-line
+     question put the sprite in the same place. -->
+<div class="sprite-slot relative min-h-0 flex-1">
 	<img
 		[src]="pokemonData.spriteUrl"
-		alt="{{ pokemonData.pokemonName }}"
-		class="pokemon-sprite rounded-circle mt-md-5 mt-lg-0"
+		[alt]="pokemonData.pokemonName"
+		class="pokemon-sprite"
+		[class.is-loading]="isLoading"
 		[style.backgroundImage]="'url(' + backgroundUrl + ')'"
 	/>
 </div>

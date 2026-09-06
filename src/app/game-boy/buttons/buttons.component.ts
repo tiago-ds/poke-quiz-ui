@@ -1,75 +1,144 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { QuizOptionComponent } from './quiz-option/quiz-option.component';
-import { PokemonData } from '../../types';
+import { NgFor, NgIf } from '@angular/common';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	Output,
+} from '@angular/core';
+import { PokemonData, QuizResult } from '../../types';
+import { isSameTypeSet } from '../../utils/utils';
+import {
+	OptionState,
+	QuizOptionComponent,
+} from './quiz-option/quiz-option.component';
+
+/** How long the answer stays revealed before the next Pokémon loads. */
+const AUTO_ADVANCE_MS = 3500;
+
+type Phase = 'answering' | 'revealed';
 
 @Component({
 	selector: 'app-buttons',
-	imports: [CommonModule, QuizOptionComponent],
+	imports: [NgFor, NgIf, QuizOptionComponent],
 	templateUrl: './buttons.component.html',
 	styleUrl: './buttons.component.scss',
 })
-export class ButtonsComponent {
+export class ButtonsComponent implements OnDestroy {
 	@Input() options: string[] = [];
 	@Input() pokemonData: PokemonData | null = null;
-	@Input() renderPokemonData: () => void = () => {};
+	@Input() isLoading = false;
 
+	@Output() guessSubmitted = new EventEmitter<QuizResult>();
+	@Output() roundFinished = new EventEmitter<void>();
+
+	readonly autoAdvanceMs = AUTO_ADVANCE_MS;
+
+	phase: Phase = 'answering';
 	selectedTypes: string[] = [];
-	submissionMessage: string = '';
-	isCorrect: boolean = false;
+	submissionMessage = '';
+	isCorrect = false;
 
-	@Output() guessSubmitted = new EventEmitter<{
-		isCorrect: boolean;
-		pointsAwarded: number;
-	}>();
+	private autoAdvanceTimer?: ReturnType<typeof setTimeout>;
 
-	onTypeSelectionChange(event: { type: string; isChecked: boolean }): void {
-		if (event.isChecked) {
-			if (!this.selectedTypes.includes(event.type)) {
-				this.selectedTypes.push(event.type);
-			}
-		} else {
-			this.selectedTypes = this.selectedTypes.filter(
-				(t) => t !== event.type
-			);
-		}
+	ngOnDestroy(): void {
+		clearTimeout(this.autoAdvanceTimer);
 	}
 
-	onSubmit(): void {
-		if (this.pokemonData) {
-			const correctTypes = this.pokemonData.types.sort();
-			const selectedTypesSorted = this.selectedTypes.sort();
+	/** Options stop responding once the answer is on screen. */
+	get isLocked(): boolean {
+		return this.phase === 'revealed' || this.isLoading;
+	}
 
-			if (
-				correctTypes.length === selectedTypesSorted.length &&
-				correctTypes.every(
-					(type, index) => type === selectedTypesSorted[index]
-				)
-			) {
-				this.submissionMessage = 'Correct! Well done!';
-				this.isCorrect = true;
-				this.guessSubmitted.emit({ isCorrect: true, pointsAwarded: 1 });
-			} else {
-				this.submissionMessage = `Oops! The correct type${
-					this.pokemonData.types.length > 1 ? 's are' : ' is'
-				} ${this.pokemonData.types.join(' and ')}.`;
-				this.isCorrect = false;
-
-				this.guessSubmitted.emit({
-					isCorrect: false,
-					pointsAwarded: -1,
-				});
-			}
-
-			setTimeout(() => {
-				this.submissionMessage = '';
-				this.isCorrect = false;
-				this.selectedTypes = [];
-
-				this.renderPokemonData();
-			}, 2000);
-		} else {
-			alert('No Pokemon data available to check types.');
+	get primaryLabel(): string {
+		if (this.isLoading) {
+			return 'Loading…';
 		}
+
+		return this.phase === 'revealed' ? 'Next Pokémon' : 'Submit';
+	}
+
+	get isPrimaryDisabled(): boolean {
+		if (this.isLoading) {
+			return true;
+		}
+
+		return (
+			this.phase === 'answering' &&
+			(!this.pokemonData || this.selectedTypes.length === 0)
+		);
+	}
+
+	onTypeSelectionChange({
+		type,
+		isChecked,
+	}: {
+		type: string;
+		isChecked: boolean;
+	}): void {
+		if (this.isLocked) {
+			return;
+		}
+
+		this.selectedTypes = isChecked
+			? [...new Set([...this.selectedTypes, type])]
+			: this.selectedTypes.filter((selected) => selected !== type);
+	}
+
+	/** How a single option should render, once the answer is revealed. */
+	optionState(type: string): OptionState {
+		if (this.phase !== 'revealed' || !this.pokemonData) {
+			return 'idle';
+		}
+
+		if (this.pokemonData.types.includes(type)) {
+			return 'correct';
+		}
+
+		return this.selectedTypes.includes(type) ? 'wrong' : 'faded';
+	}
+
+	onPrimaryAction(): void {
+		if (this.phase === 'revealed') {
+			this.goToNextPokemon();
+			return;
+		}
+
+		this.revealAnswer();
+	}
+
+	private revealAnswer(): void {
+		if (!this.pokemonData) {
+			return;
+		}
+
+		const correctTypes = this.pokemonData.types;
+
+		this.phase = 'revealed';
+		this.isCorrect = isSameTypeSet(correctTypes, this.selectedTypes);
+		this.submissionMessage = this.isCorrect
+			? 'Correct! Well done!'
+			: `It's ${correctTypes.join(' and ')}.`;
+
+		this.guessSubmitted.emit({
+			isCorrect: this.isCorrect,
+			pointsAwarded: this.isCorrect ? 1 : -1,
+		});
+
+		this.autoAdvanceTimer = setTimeout(
+			() => this.goToNextPokemon(),
+			AUTO_ADVANCE_MS
+		);
+	}
+
+	private goToNextPokemon(): void {
+		clearTimeout(this.autoAdvanceTimer);
+
+		this.phase = 'answering';
+		this.submissionMessage = '';
+		this.isCorrect = false;
+		this.selectedTypes = [];
+
+		this.roundFinished.emit();
 	}
 }

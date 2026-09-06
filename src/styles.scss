@@ -1,10 +1,17 @@
-@use "./app/styles/variables" as var;
+@use "./app/styles/variables" as v;
 
 html,
 body {
+	height: 100%;
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	overflow-x: hidden;
+}
+
+body {
+	// The game is sized to fit the viewport; nothing here should scroll.
+	overflow: hidden;
+
 	background-color: bisque;
+	font-family: v.$font-body;
 }

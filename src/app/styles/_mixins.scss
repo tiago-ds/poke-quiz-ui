@@ -1,0 +1,51 @@
+@use "variables" as v;
+
+@mixin below($breakpoint) {
+	@media (max-width: $breakpoint) {
+		@content;
+	}
+}
+
+@mixin from($breakpoint) {
+	@media (min-width: $breakpoint) {
+		@content;
+	}
+}
+
+/** The dark, bordered panel used by the score HUD and the region selector. */
+@mixin hud-panel {
+	background-color: v.$hud-bg;
+	border: 2px solid v.$hud-border;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+
+	color: v.$pokedex-white;
+	font-family: v.$font-hud;
+}
+
+/**
+ * The chunky grey button shared by "submit regions" and the Game Boy's
+ * "submit". Callers set their own hover border colour and type scale.
+ */
+@mixin control-button {
+	background-color: v.$control-bg;
+	border: 2px solid v.$hud-border;
+	border-radius: 4px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	color: v.$pokedex-white;
+	cursor: pointer;
+	padding: 10px 20px;
+	transition: background-color 0.2s ease, border-color 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:hover:not(:disabled) {
+		background-color: v.$control-bg-hover;
+	}
+
+	&:disabled {
+		background-color: v.$pokedex-black;
+		border-color: v.$control-border-disabled;
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
